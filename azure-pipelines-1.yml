@@ -4,16 +4,26 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+  branches:
+    include:
+      - main  # Adjust this to your primary branch if different
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'  # The environment to run the build
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+# Step 1: Install Node.js
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'  # Specify the Node.js version required
+  displayName: 'Install Node.js'
 
+# Step 2: Install Dependencies
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    npm install
+  displayName: 'Install Dependencies'
+
+# Step 3: Run Tests
+- script: |
+    npm test
+  displayName: 'Run Tests'
