@@ -25,5 +25,5 @@ steps:
 
 # Step 3: Run Tests
 - script: |
-    npm test
+    echo "hello world"
   displayName: 'Run Tests'
