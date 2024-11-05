@@ -8,9 +8,7 @@ trigger:
     include:
       - main  # Adjust this to your primary branch if different
 
-pool:
-  vmImage: 'ubuntu-latest'  # The environment to run the build
-
+pool: default
 steps:
 # Step 1: Install Node.js
 - task: NodeTool@0
