@@ -8,7 +8,8 @@ trigger:
     include:
       - main  # Adjust this to your primary branch if different
 
-pool: default
+pool:
+ vmImage: 'windows-latest'
 steps:
 # Step 1: Install Node.js
 - task: NodeTool@0
