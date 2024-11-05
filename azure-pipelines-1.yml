@@ -20,10 +20,16 @@ steps:
 
 # Step 2: Install Dependencies
 - script: |
+    npm build
     npm install
+    npm test
   displayName: 'Install Dependencies'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/TEST-*.xml'
 
-# Step 3: Run Tests
+# Step 3: 
 - script: |
-    echo "hello world"
+    echo "Your code seems to run"
   displayName: 'Run Tests'
