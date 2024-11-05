@@ -28,8 +28,3 @@ steps:
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: '**/TEST-*.xml'
-
-# Step 3: 
-- script: |
-    echo "Your code seems to run"
-  displayName: 'Run Tests'
