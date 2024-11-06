@@ -5,7 +5,7 @@
   "main": "connect_four.js",
   "scripts": {
     "start": "node connect_four.js",
-    "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./Test1.xml test/seleniumTest.js",
+    "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./Test1.xml seleniumTest.js",
     "build": "echo 'No build step defined'"
   },
   "dependencies": {
