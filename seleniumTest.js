@@ -1,6 +1,6 @@
 // test/seleniumTest.js
 const { Builder, By, until } = require('selenium-webdriver');
-const { createBoard, dropPiece, checkWinner, board } = require('../game');
+const { createBoard, dropPiece, checkWinner, board } = require('connect_four.js');
 const assert = require('assert');
 
 describe('Connect Four Game Tests', function() {
