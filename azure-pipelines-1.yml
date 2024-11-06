@@ -1,29 +1,28 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# azure-pipelines.yml
 trigger:
   branches:
     include:
-      - main  # Adjust this to your primary branch if different
+      - main
 
 pool:
- vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
+
 steps:
-# Step 1: Install Node.js
 - task: NodeTool@0
   inputs:
-    versionSpec: '14.x'  # Specify the Node.js version required
+    versionSpec: '16.x'  # Specify the Node.js version
   displayName: 'Install Node.js'
 
-# Step 2: Install Dependencies
 - script: |
-    npm build
     npm install
+  displayName: 'Install dependencies'
+
+- script: |
     npm test
-  displayName: 'Install Dependencies'
+  displayName: 'Run Tests'
+
 - task: PublishTestResults@2
   inputs:
-    testResultsFormat: 'JUnit'
     testResultsFiles: '**/Test1.xml'
+    testRunTitle: 'Connect Four Game Tests'
+  displayName: 'Publish Test Results'
