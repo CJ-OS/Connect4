@@ -26,8 +26,11 @@ steps:
     # Use Node.js to ensure the TestResults directory exists in a cross-platform way
     node -e "require('fs').mkdirSync('TestResults', { recursive: true });"
     
+    # List the files in the working directory to ensure the test file is present
+    ls -l
+    
     # Run Mocha tests using selenium-webdriver and output results to TestResults folder
-    npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml --verbose seleniumTest.js
+    npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js
   displayName: 'Run Selenium Tests'
 
 # Step 4: Publish test results to Azure DevOps
