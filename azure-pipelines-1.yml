@@ -30,7 +30,7 @@ steps:
     ls -l
     
     # Run Mocha tests using selenium-webdriver and output results to TestResults folder
-    npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js
+    npx mocha --reporter spec mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js
   displayName: 'Run Selenium Tests'
 
 # Step 4: Publish test results to Azure DevOps
