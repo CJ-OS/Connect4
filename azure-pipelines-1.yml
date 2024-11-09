@@ -39,8 +39,11 @@ steps:
 - script: |
     # List the files in the working directory to ensure the test file is present
     ls -l
-    # Run Mocha tests and generate the XML file with mocha-junit-reporter
-    npx mocha seleniumTest.js --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml
+    # Check if the seleniumTest.js file exists in the working directory
+    if [ ! -f "seleniumTest.js" ]; then echo "seleniumTest.js not found!"; exit 1; fi
+    
+    # Run Mocha tests with verbose output and generate the XML file with mocha-junit-reporter
+    npx mocha seleniumTest.js --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml --verbose
   displayName: 'Run Selenium Tests and Generate Report'
 
 # Step 6: Publish test results to Azure DevOps
