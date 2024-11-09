@@ -4,7 +4,7 @@ trigger:
       - main  # Triggers the pipeline on commits to the main branch
 
 pool:
-  vmImage: 'ubuntu-latest'  # Uses the latest Ubuntu image for the pipeline (can be changed if needed)
+  vmImage: 'ubuntu-latest'  # You can change this to another image if needed
 
 steps:
 # Step 1: Install Node.js
@@ -23,19 +23,27 @@ steps:
     ls -l
   displayName: 'Install dependencies and debug'
 
-# Step 3: Run Selenium tests using Mocha with verbose output
+# Step 3: Create TestResults directory (cross-platform)
 - script: |
-    # Use Node.js to ensure the TestResults directory exists in a cross-platform way
+    # Create the TestResults directory explicitly (works on both Linux and Windows)
+    mkdir -p TestResults
+  displayName: 'Create TestResults Directory'
+
+# Step 4: Ensure TestResults directory exists (cross-platform)
+- script: |
+    # Ensure the TestResults directory exists in a cross-platform way using Node.js
     node -e "require('fs').mkdirSync('TestResults', { recursive: true });"
-    
+  displayName: 'Ensure TestResults Directory Exists'
+
+# Step 5: Run Selenium tests using Mocha with verbose output
+- script: |
     # List the files in the working directory to ensure the test file is present
     ls -l
-    
-    # Run Mocha tests using selenium-webdriver and output results to TestResults folder
-    npx mocha --reporter spec mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js
-  displayName: 'Run Selenium Tests'
+    # Run Mocha tests and generate the XML file with mocha-junit-reporter
+    npx mocha seleniumTest.js --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml
+  displayName: 'Run Selenium Tests and Generate Report'
 
-# Step 4: Publish test results to Azure DevOps
+# Step 6: Publish test results to Azure DevOps
 - task: PublishTestResults@2
   inputs:
     testResultsFiles: '**/TestResults/Test1.xml'  # Path to the generated XML file
