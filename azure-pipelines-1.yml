@@ -13,17 +13,15 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
+    # Install all necessary dependencies (including mocha and mocha-junit-reporter)
     npm install
-    npm install mocha-junit-reporter --save-dev
-     npm install -g mocha
-    npm install mocha-junit-reporter --save-dev
   displayName: 'Install dependencies'
 
 - script: |
     # Ensure the TestResults directory exists
     mkdir -p TestResults
-    # Run tests and generate the XML file with mocha-junit-reporter
-    mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js
+    # Run tests and generate the XML file with mocha-junit-reporter using npx
+    npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js
   displayName: 'Run Tests'
 
 - task: PublishTestResults@2
