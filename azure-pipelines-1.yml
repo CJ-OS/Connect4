@@ -4,7 +4,7 @@ trigger:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'  # You can change this to a different image if you're on Windows or macOS.
 
 steps:
 # Step 1: Install Node.js
@@ -13,18 +13,21 @@ steps:
     versionSpec: '16.x'  # Specify the Node.js version
   displayName: 'Install Node.js'
 
-# Step 2: Install dependencies
+# Step 2: Install dependencies and debug
 - script: |
-    # Install all dependencies including selenium-webdriver and chromedriver
+    # Install all dependencies including selenium-webdriver, chromedriver, mocha, and mocha-junit-reporter
     npm install
-  displayName: 'Install dependencies'
+    npm list --depth=2  # List installed packages to ensure everything is installed
+    ls -l  # List files in the current directory for verification
+  displayName: 'Install dependencies and debug'
 
-# Step 3: Run Selenium tests using Mocha
+# Step 3: Run Selenium tests using Mocha with verbose output
 - script: |
-    # Ensure the TestResults directory exists
-    mkdir -p TestResults
+    # Use Node.js to ensure the TestResults directory exists in a cross-platform way
+    node -e "require('fs').mkdirSync('TestResults', { recursive: true });"
+    
     # Run Mocha tests using selenium-webdriver and output results to TestResults folder
-    npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js
+    npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml --verbose seleniumTest.js
   displayName: 'Run Selenium Tests'
 
 # Step 4: Publish test results to Azure DevOps
