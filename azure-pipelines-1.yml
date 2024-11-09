@@ -15,6 +15,8 @@ steps:
 - script: |
     npm install
     npm install mocha-junit-reporter --save-dev
+     npm install -g mocha
+    npm install mocha-junit-reporter --save-dev
   displayName: 'Install dependencies'
 
 - script: |
