@@ -1,32 +1,39 @@
-// test/seleniumTest.js
 const { Builder, By, until } = require('selenium-webdriver');
 const assert = require('assert');
 
 describe('Connect Four Game Tests', function() {
+  this.timeout(30000);  // Set a longer timeout for Selenium tests
+
+  let driver;
+
   before(async function() {
-    // Initialize board before each test
-    createBoard();
-  });
-
-  it('should allow a player to drop a piece', function() {
-    const player = 1;
-    const column = 0;
-    const result = dropPiece(column, player);
-    assert.strictEqual(result, true, "Piece should be dropped successfully");
-  });
-
-  it('should detect a win condition', function() {
-    const player = 1;
-    // Simulate a win by dropping pieces
-    dropPiece(0, player);
-    dropPiece(1, player);
-    dropPiece(2, player);
-    dropPiece(3, player);
-    assert.strictEqual(checkWinner(player), true, "Player should have won");
+    // Start the browser
+    driver = await new Builder().forBrowser('chrome').build();
+    await driver.get('http://localhost:3000');  // Assuming the app is running locally
   });
 
   after(async function() {
-    // Reset the board or clean up if necessary
-    board.length = 0; // clear board for next test
+    // Close the browser after tests
+    await driver.quit();
+  });
+
+  it('should allow a player to drop a piece', async function() {
+    const cell = await driver.findElement(By.css('.column:nth-child(1)'));  // Select first column
+    await cell.click();
+
+    // Assert that the piece was dropped (this is a simple example, adjust according to the app's behavior)
+    const piece = await driver.findElement(By.css('.piece')).isDisplayed();
+    assert.strictEqual(piece, true);
+  });
+
+  it('should detect a win condition', async function() {
+    const cells = await driver.findElements(By.css('.column .cell'));  // Select all cells
+    // Code to simulate moves to trigger a win (for simplicity, using a single click)
+    await cells[0].click();  // Simulate drop
+    await cells[1].click();  // Simulate another drop
+
+    // Check for win (adjust according to your app's logic)
+    const winMessage = await driver.findElement(By.css('.win-message')).getText();
+    assert.strictEqual(winMessage, 'Player 1 wins!');
   });
 });
