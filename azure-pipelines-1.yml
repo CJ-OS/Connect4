@@ -1,10 +1,10 @@
 trigger:
   branches:
     include:
-      - main
+      - main  # Triggers the pipeline on commits to the main branch
 
 pool:
-  vmImage: 'ubuntu-latest'  # You can change this to a different image if you're on Windows or macOS.
+  vmImage: 'ubuntu-latest'  # Uses the latest Ubuntu image for the pipeline (can be changed if needed)
 
 steps:
 # Step 1: Install Node.js
@@ -17,8 +17,10 @@ steps:
 - script: |
     # Install all dependencies including selenium-webdriver, chromedriver, mocha, and mocha-junit-reporter
     npm install
-    npm list --depth=2  # List installed packages to ensure everything is installed
-    ls -l  # List files in the current directory for verification
+    # List installed packages to ensure everything is installed
+    npm list --depth=2
+    # List files in the current directory for verification
+    ls -l
   displayName: 'Install dependencies and debug'
 
 # Step 3: Run Selenium tests using Mocha with verbose output
