@@ -5,7 +5,7 @@
   "main": "connect_four.js",
 
   "scripts": {
-    "start": "node connect_four.js",
+    "start": "node connect_four.js", 
     "test": "mocha --reporter mocha-jenkins-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js",
     "build": "echo 'No build step defined'"
   },
@@ -18,7 +18,7 @@
   },
 
   "devDependencies": {},
-  
+
   "author": "Your Name",
   "license": "ISC"
 }
