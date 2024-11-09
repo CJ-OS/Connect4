@@ -7,25 +7,29 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+# Step 1: Install Node.js
 - task: NodeTool@0
   inputs:
     versionSpec: '16.x'  # Specify the Node.js version
   displayName: 'Install Node.js'
 
+# Step 2: Install dependencies
 - script: |
-    # Install all necessary dependencies (including mocha and mocha-junit-reporter)
+    # Install all dependencies including selenium-webdriver and chromedriver
     npm install
   displayName: 'Install dependencies'
 
+# Step 3: Run Selenium tests using Mocha
 - script: |
     # Ensure the TestResults directory exists
     mkdir -p TestResults
-    # Run tests and generate the XML file with mocha-junit-reporter using npx
+    # Run Mocha tests using selenium-webdriver and output results to TestResults folder
     npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js
-  displayName: 'Run Tests'
+  displayName: 'Run Selenium Tests'
 
+# Step 4: Publish test results to Azure DevOps
 - task: PublishTestResults@2
   inputs:
     testResultsFiles: '**/TestResults/Test1.xml'  # Path to the generated XML file
-    testRunTitle: 'Connect Four Game Tests'
+    testRunTitle: 'Selenium Tests'
   displayName: 'Publish Test Results'
