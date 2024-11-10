@@ -1,0 +1,54 @@
+trigger:
+  branches:
+    include:
+      - main  # Triggers the pipeline on commits to the main branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # You can change this to another image if needed
+
+steps:
+# Step 1: Install Node.js
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'  # Specify the Node.js version
+  displayName: 'Install Node.js'
+
+# Step 2: Install dependencies and debug
+- script: |
+    # Install all dependencies including selenium-webdriver, chromedriver, mocha, and mocha-jenkins-reporter
+    npm install
+    # List installed packages to ensure everything is installed
+    npm list --depth=2
+    # List files in the current directory for verification
+    ls -l
+  displayName: 'Install dependencies and debug'
+
+# Step 3: Create TestResults directory (cross-platform)
+- script: |
+    # Create the TestResults directory explicitly (works on both Linux and Windows)
+    mkdir -p TestResults
+  displayName: 'Create TestResults Directory'
+
+# Step 4: Ensure TestResults directory exists (cross-platform)
+- script: |
+    # Ensure the TestResults directory exists in a cross-platform way using Node.js
+    node -e "require('fs').mkdirSync('TestResults', { recursive: true });"
+  displayName: 'Ensure TestResults Directory Exists'
+
+# Step 5: Run Selenium tests using Mocha with verbose output
+- script: |
+    # List the files in the working directory to ensure the test file is present
+    ls -l
+    # Check if the seleniumTest.js file exists in the working directory
+    if [ ! -f "seleniumTest.js" ]; then echo "seleniumTest.js not found!"; exit 1; fi
+    
+    # Run Mocha tests with verbose output and generate the XML file with mocha-jenkins-reporter
+    npx mocha seleniumTest.js --reporter mocha-jenkins-reporter --reporter-options mochaFile=TestResults/Test1.xml --verbose
+  displayName: 'Run Selenium Tests and Generate Report'
+
+# Step 6: Publish test results to Azure DevOps
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: '**/TestResults/Test1.xml'  # Path to the generated XML file
+    testRunTitle: 'Selenium Tests'
+  displayName: 'Publish Test Results'
