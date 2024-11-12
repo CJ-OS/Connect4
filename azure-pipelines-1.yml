@@ -1,4 +1,3 @@
-# .azure-pipelines.yml
 trigger:
   branches:
     include:
@@ -8,7 +7,27 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+
+  # Install Node.js (using NodeTool)
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.x'  # Adjust to the version your project needs
+
+  # Install dependencies (assuming package.json exists)
   - script: |
-      echo "Running Tests..."
-      echo "All tests passed with 100% success rate!"
-    displayName: "Run Tests"
+      npm install
+    displayName: 'Install Dependencies'
+
+  # Run Selenium Tests using Node.js
+  - script: |
+      echo "Running Selenium Tests..."
+      node seleniumTest.js
+    displayName: 'Run Selenium Tests'
+
+  # Optional: Publish Test Results if you're using a test framework with output
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/test-results.xml'  # Adjust this if you're using another format (e.g., Mocha or Jest)
+      testRunTitle: 'Selenium Test Results'
+      mergeTestResults: true
+      publishRunAttachments: true
