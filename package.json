@@ -6,7 +6,7 @@
 
   "scripts": {
     "start": "node connect_four.js",
-    "test": "mocha --reporter mocha-jenkins-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js",
+    "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js",
     "build": "echo 'No build step defined'"
   },
 
@@ -17,7 +17,7 @@
   },
 
   "devDependencies": {
-    "mocha-jenkins-reporter": "^1.0.0"  
+    "mocha-junit-reporter": "^2.0.0"  // Use a valid and supported reporter like mocha-junit-reporter
   },
 
   "author": "Your Name",
