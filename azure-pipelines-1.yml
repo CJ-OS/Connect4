@@ -18,29 +18,30 @@ steps:
       npm install
     displayName: 'Install Dependencies'
 
-  # Step 3: Run Selenium Tests
+  # Step 3: Run Node Tests (Change name if it's actually running Selenium tests)
   - script: |
-      echo "Running Selenium Tests..."
-      node seleniumTest.js  # Make sure seleniumTest.js exists and is configured correctly
-    displayName: 'Run Selenium Tests'
+      echo "Running Node Tests..."
+      node nodeTest.js  # Ensure nodeTest.js exists and is configured correctly
+    displayName: 'Run Node Tests'
 
-  # Step 4: Optional - Publish Selenium Test Results (if applicable)
+  # Step 4: Optional - Publish Test Results for Node Tests (if applicable)
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '**/test-resultsS.xml'  # Adjust if Selenium results are in a different format or location
-      testRunTitle: 'Selenium Test Results'
+      testResultsFiles: '**/test-results.xml'  # Adjust this path if the test results are in a different format
+      testRunTitle: 'Node.js Test Results'
       mergeTestResults: true
       publishRunAttachments: true
-    
+    condition: succeededOrFailed()  # Only publish results if the test run succeeds or fails
+
   # Step 5: Run Jest Tests
   - script: |
       npm test  # Ensure that the test command is set up to run Jest tests
     displayName: 'Run Jest Tests'
 
-  # Step 6: Publish Jest Test Results
+  # Step 6: Publish Jest Test Results (Jest with jest-junit reporter)
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '**/TestResults/*.xml'  # Adjust path to where Jest's JUnit results are stored
+      testResultsFiles: '**/TestResults/*.xml'  # Adjust the path if your Jest test results are in a different directory
       testRunTitle: 'Jest Test Results'
       mergeTestResults: true
       publishRunAttachments: true
