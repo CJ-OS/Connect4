@@ -6,18 +6,18 @@
 
   "scripts": {
     "start": "node connect_four.js",
-    "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=TestResults/Test1.xml seleniumTest.js",
+    "test": "jest --ci --reporters=default --reporters=jest-junit --testResultsProcessor=jest-junit seleniumTest.js",
     "build": "echo 'No build step defined'"
   },
 
   "dependencies": {
     "selenium-webdriver": "^4.0.0",
-    "chromedriver": "^114.0.0",
-    "mocha": "^10.0.0"
+    "chromedriver": "^114.0.0"
   },
 
   "devDependencies": {
-    "mocha-junit-reporter": "^2.0.0"  // Use a valid and supported reporter like mocha-junit-reporter
+    "jest": "^29.0.0",
+    "jest-junit": "^13.0.0"
   },
 
   "author": "Your Name",
