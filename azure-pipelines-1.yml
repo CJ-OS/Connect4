@@ -1,33 +1,52 @@
 trigger:
   branches:
     include:
-      - main
+      - main  # Trigger the pipeline on changes to the main branch
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'  # Use the latest Ubuntu image for the pipeline
 
 steps:
 
-  # Install Node.js (using NodeTool)
+  # Step 1: Set up Node.js
   - task: NodeTool@0
     inputs:
-      versionSpec: '16.x'  # Adjust to the version your project needs
+      versionSpec: '16.x'  # Install Node.js version 16.x (adjust as needed)
 
-  # Install dependencies (assuming package.json exists)
+  # Step 2: Install dependencies from package.json
   - script: |
       npm install
     displayName: 'Install Dependencies'
 
-  # Run Selenium Tests using Node.js
+  # Step 3: Run Selenium Tests
   - script: |
       echo "Running Selenium Tests..."
-      node seleniumTest.js
+      node seleniumTest.js  # Make sure seleniumTest.js exists and is configured correctly
     displayName: 'Run Selenium Tests'
 
-  # Optional: Publish Test Results if you're using a test framework with output
+  # Step 4: Optional - Publish Selenium Test Results (if applicable)
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '**/test-results.xml'  # Adjust this if you're using another format (e.g., Mocha or Jest)
+      testResultsFiles: '**/test-resultsS.xml'  # Adjust if Selenium results are in a different format or location
       testRunTitle: 'Selenium Test Results'
       mergeTestResults: true
       publishRunAttachments: true
+    
+  # Step 5: Run Jest Tests
+  - script: |
+      npm test  # Ensure that the test command is set up to run Jest tests
+    displayName: 'Run Jest Tests'
+
+  # Step 6: Publish Jest Test Results
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/TestResults/*.xml'  # Adjust path to where Jest's JUnit results are stored
+      testRunTitle: 'Jest Test Results'
+      mergeTestResults: true
+      publishRunAttachments: true
+    condition: succeededOrFailed()  # Only publish results if the test run succeeds or fails
+
+  # Step 7: Post-Test Cleanup and Notification
+  - script: |
+      echo "Test run completed!"
+    displayName: 'Post-Test Cleanup and Notification'
