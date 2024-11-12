@@ -1,25 +1,24 @@
 {
-  "name": "connect-four-game",
+  "name": "my-project",
   "version": "1.0.0",
-  "description": "Connect Four game with automated testing using Selenium in Azure Pipelines.",
-  "main": "connect_four.js",
-
   "scripts": {
-    "start": "node connect_four.js",
-    "test": "jest --ci --reporters=default --reporters=jest-junit --testResultsProcessor=jest-junit seleniumTest.js",
-    "build": "echo 'No build step defined'"
+    "test": "jest",  // Command to run Jest tests
+    "nodeTest": "node nodeTest.js"  // Command to run nodeTest.js (replace if you're running Selenium)
   },
-
   "dependencies": {
-    "selenium-webdriver": "^4.0.0",
-    "chromedriver": "^114.0.0"
+    // Add runtime dependencies here if needed
+    "selenium-webdriver": "^4.0.0"  // Example for Selenium WebDriver if you're using it
   },
-
   "devDependencies": {
-    "jest": "^29.0.0",
-    "jest-junit": "^13.0.0"
+    "jest": "^29.0.0",  // Add Jest as a devDependency
+    "jest-junit": "^13.0.0",  // JUnit reporter for Jest (to generate XML results)
+    "chromedriver": "^115.0.0"  // Required if you're using Chrome for Selenium tests (or adjust for your WebDriver)
   },
-
-  "author": "Your Name",
-  "license": "ISC"
+  "jest": {
+    "preset": "jest-puppeteer",  // This is useful if you need Puppeteer or Chrome for Jest
+    "testEnvironment": "node",  // Default test environment for Jest
+    "testResultsProcessor": "jest-junit",  // Use jest-junit to process results
+    "coverageDirectory": "./coverage",  // Optionally define where coverage reports are stored
+    "collectCoverage": true  // Optional: Set to true if you want coverage reports
+  }
 }
