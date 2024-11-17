@@ -1,53 +1,46 @@
 trigger:
   branches:
     include:
-      - main  # Trigger the pipeline on changes to the main branch
+      - main 
 
 pool:
-  vmImage: 'ubuntu-latest'  # Use the latest Ubuntu image for the pipeline
+  vmImage: 'ubuntu-latest'
 
 steps:
-
-  # Step 1: Set up Node.js
   - task: NodeTool@0
     inputs:
-      versionSpec: '16.x'  # Install Node.js version 16.x (adjust as needed)
+      versionSpec: '16.x' 
 
-  # Step 2: Install dependencies from package.json
+
   - script: |
       npm install
     displayName: 'Install Dependencies'
 
-  # Step 3: Run Node Tests (Change name if it's actually running Selenium tests)
   - script: |
       echo "Running Node Tests..."
       node nodeTest.js  # Ensure nodeTest.js exists and is configured correctly
     displayName: 'Run Node Tests'
 
-  # Step 4: Optional - Publish Test Results for Node Tests (if applicable)
+
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '**/test-results.xml'  # Adjust this path if the test results are in a different format
+      testResultsFiles: '**/nodeTest-results.xml' 
       testRunTitle: 'Node.js Test Results'
       mergeTestResults: true
       publishRunAttachments: true
-    condition: succeededOrFailed()  # Only publish results if the test run succeeds or fails
 
-  # Step 5: Run Jest Tests
   - script: |
       npm test  # Ensure that the test command is set up to run Jest tests
     displayName: 'Run Jest Tests'
 
-  # Step 6: Publish Jest Test Results (Jest with jest-junit reporter)
+
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '**/TestResults/*.xml'  # Adjust the path if your Jest test results are in a different directory
+      testResultsFiles: 'jestTest-Results/*.xml' 
       testRunTitle: 'Jest Test Results'
       mergeTestResults: true
       publishRunAttachments: true
-    condition: succeededOrFailed()  # Only publish results if the test run succeeds or fails
 
-  # Step 7: Post-Test Cleanup and Notification
   - script: |
       echo "Test run completed!"
     displayName: 'Post-Test Cleanup and Notification'
