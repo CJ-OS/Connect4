@@ -1,16 +1,19 @@
 {
-  "name": "my-project",
+  "name": "connect_four",
   "version": "1.0.0",
   "scripts": {
     "test": "jest",
-    "nodeTest": "node nodeTest.js"
+    "nodeTest": "node nodeTest.js",
+    "jest-w": "jestTest.js"
   },
   "dependencies": {
-    "selenium-webdriver": "^4.0.0"
+    "selenium-webdriver": "^4.0.0",
+    "jest-w": "jest --watch"
   },
   "devDependencies": {
     "jest": "^29.0.0",
     "jest-junit": "^13.0.0",
+    "jest-w": "jest --watch",
     "chromedriver": "^115.0.0"
   },
   "jest": {
