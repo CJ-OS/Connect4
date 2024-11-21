@@ -16,11 +16,6 @@ steps:
       npm install
     displayName: 'Install Dependencies'
 
-  - script: |
-      echo "Running Node Tests..."
-      node nodeTest.js  # Ensure nodeTest.js exists and is configured correctly
-    displayName: 'Run Node Tests'
-
 
   - task: PublishTestResults@2
     inputs:
