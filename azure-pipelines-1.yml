@@ -17,6 +17,11 @@ steps:
     displayName: 'Install Dependencies'
 
 
+  - script: |
+      echo "Running Node Tests..."
+      node nodeTest.js  # Ensure nodeTest.js exists and is configured correctly
+    displayName: 'Run Node Tests'
+
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: '**/nodeTest-results.xml' 
@@ -24,17 +29,6 @@ steps:
       mergeTestResults: true
       publishRunAttachments: true
 
-  - script: |
-      npm test  # Ensure that the test command is set up to run Jest tests
-    displayName: 'Run Jest Tests'
-
-
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: 'jestTest-Results/*.xml' 
-      testRunTitle: 'Jest Test Results'
-      mergeTestResults: true
-      publishRunAttachments: true
 
   - script: |
       echo "Test run completed!"
