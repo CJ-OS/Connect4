@@ -4,7 +4,19 @@ trigger:
       - Treatsc2_js_test 
 
 pool:
-  vmImage: 'ubuntu-latest'
+ vmImage: 'ubuntu-latest' 
+
+ variables:
+ repositoryName: '<target repository name>'
+
+ steps:
+ - task: Docker@2
+ inputs:
+ containerRegistry: '<docker connection>'
+ repository: $(repositoryName)
+ command: 'buildAndPush'
+ Dockerfile: '**/Dockerfile'
+
 
 steps:
   - task: NodeTool@0
