@@ -38,14 +38,13 @@ function checkWinner(player) {
                 board[row][col + 1] === player &&
                 board[row][col + 2] === player &&
                 board[row][col + 3] === player) {
-                return true;
+                return true; // Correctly placed closing brace
             }
         }
     }
 
     // Check vertical
-    for (let row = 0; row  
- < rows - winningLength + 1; row++) {
+    for (let row = 0; row < rows - winningLength + 1; row++) {
         for (let col = 0; col < cols; col++) {
             if (board[row][col] === player &&
                 board[row + 1][col] === player &&
@@ -57,8 +56,7 @@ function checkWinner(player) {
     }
 
     // Check diagonal (top-left to bottom-right)
-    for (let row = 0; row < rows  
- - winningLength + 1; row++) {
+    for (let row = 0; row < rows - winningLength + 1; row++) {
         for (let col = 0; col < cols - winningLength + 1; col++) {
             if (board[row][col] === player &&
                 board[row + 1][col + 1] === player &&
@@ -69,10 +67,8 @@ function checkWinner(player) {
         }
     }
 
-    // Check  
- diagonal (top-right to bottom-left)
-    for  
- (let row = 0; row < rows - winningLength + 1; row++) {
+    // Check diagonal (top-right to bottom-left)
+    for (let row = 0; row < rows - winningLength + 1; row++) {
         for (let col = winningLength - 1; col < cols; col++) {
             if (board[row][col] === player &&
                 board[row + 1][col - 1] === player &&
@@ -84,32 +80,15 @@ function checkWinner(player) {
     }
 
     return false;  
-
 }
 
-function playGame() {
-    createBoard();
-    printBoard();
+// Export the functions
+module.exports = {
+    createBoard,
+    dropPiece,
+    checkWinner,
+    printBoard,
+    getBoard
+};
 
-    let currentPlayer = 1;
-    while (true) {
-        const col = parseInt(prompt(`Player ${currentPlayer}, enter a column (1-${cols}):`));
-        if (isNaN(col) || col < 1 || col > cols) {
-            console.log("Invalid column. Please try again.");
-            continue;
-        }
-
-        if (dropPiece(col - 1, currentPlayer)) {
-            printBoard();
-            if (checkWinner(currentPlayer)) {
-                console.log(`Player ${currentPlayer} wins!`);
-                break;
-            }
-            currentPlayer = currentPlayer === 1 ? 2 : 1;
-        } else {
-            console.log("Column is full. Please choose another.");
-        }
-    }
-}
-
-playGame();
+//playGame(); uncomment to play game
