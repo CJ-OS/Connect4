@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main 
+      - Treatsc2_js_test 
 
 pool:
   vmImage: 'ubuntu-latest'
