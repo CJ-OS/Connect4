@@ -1,4 +1,4 @@
-const { Builder, By } = require('selenium-webdriver');
+const { Builder, By } = require('test');
 jest.setTimeout(30000);  // Set a longer timeout for Selenium tests
 let driver;
 beforeAll(async () => {
