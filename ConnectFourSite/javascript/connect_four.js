@@ -30,56 +30,44 @@ function dropPiece(col, player) {
     return false;
 }
 
+// Helper to check a winning sequence
+function checkSequence(startRow, startCol, deltaRow, deltaCol, player) {
+    for (let i = 0; i < winningLength; i++) {
+        const row = startRow + i * deltaRow;
+        const col = startCol + i * deltaCol;
+        if (row < 0 || row >= rows || col < 0 || col >= cols || board[row][col] !== player) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Check for all directions
+function checkDirection(player, deltaRow, deltaCol) {
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            if (checkSequence(row, col, deltaRow, deltaCol, player)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function checkWinner(player) {
     // Check horizontal
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols - winningLength + 1; col++) {
-            if (board[row][col] === player &&
-                board[row][col + 1] === player &&
-                board[row][col + 2] === player &&
-                board[row][col + 3] === player) {
-                return true; // Correctly placed closing brace
-            }
-        }
-    }
+    if (checkDirection(player, 0, 1)) return true;
 
     // Check vertical
-    for (let row = 0; row < rows - winningLength + 1; row++) {
-        for (let col = 0; col < cols; col++) {
-            if (board[row][col] === player &&
-                board[row + 1][col] === player &&
-                board[row + 2][col] === player &&
-                board[row + 3][col] === player) {
-                return true;
-            }
-        }
-    }
+    if (checkDirection(player, 1, 0)) return true;
 
     // Check diagonal (top-left to bottom-right)
-    for (let row = 0; row < rows - winningLength + 1; row++) {
-        for (let col = 0; col < cols - winningLength + 1; col++) {
-            if (board[row][col] === player &&
-                board[row + 1][col + 1] === player &&
-                board[row + 2][col + 2] === player &&
-                board[row + 3][col + 3] === player) {
-                return true;
-            }
-        }
-    }
+    if (checkDirection(player, 1, 1)) return true;
 
     // Check diagonal (top-right to bottom-left)
-    for (let row = 0; row < rows - winningLength + 1; row++) {
-        for (let col = winningLength - 1; col < cols; col++) {
-            if (board[row][col] === player &&
-                board[row + 1][col - 1] === player &&
-                board[row + 2][col - 2] === player &&
-                board[row + 3][col - 3] === player) {
-                return true;
-            }
-        }
-    }
+    if (checkDirection(player, 1, -1)) return true;
 
-    return false;  
+    return false;
 }
 
 // Export the functions
@@ -87,8 +75,7 @@ module.exports = {
     createBoard,
     dropPiece,
     checkWinner,
-    printBoard,
-    getBoard
+    printBoard
 };
 
 //playGame(); uncomment to play game
