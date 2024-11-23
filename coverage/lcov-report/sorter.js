@@ -30,8 +30,7 @@ const addSorting = (function () {
     function onFilterInput() {
         const searchValue = document.getElementById('fileSearch').value;
         const rows = document.getElementsByTagName('tbody')[0].children;
-        for (let i = 0; i < rows.length; i++) {
-            const row = rows[i];
+        for (const row of rows) {
             if (
                 row.textContent
                     .toLowerCase()
@@ -42,6 +41,7 @@ const addSorting = (function () {
                 row.style.display = 'none';
             }
         }
+
     }
 
     // loads the search box
@@ -57,8 +57,7 @@ const addSorting = (function () {
         const colNodes = getTableHeader().querySelectorAll('th');
         const cols = [];
 
-        for (let i = 0; i < colNodes.length; i += 1) {
-            const colNode = colNodes[i];
+        for (const colNode of colNodes) {
             const col = {
                 key: colNode.getAttribute('data-col'),
                 sortable: !colNode.getAttribute('data-nosort'),
@@ -67,11 +66,11 @@ const addSorting = (function () {
             cols.push(col);
             if (col.sortable) {
                 col.defaultDescSort = col.type === 'number';
-                colNode.innerHTML =
-                    colNode.innerHTML + '<span class="sorter"></span>';
+                colNode.innerHTML += '<span class="sorter"></span>';
             }
         }
         return cols;
+
     }
 
     // attaches a data attribute to every tr element with an object
@@ -96,9 +95,10 @@ const addSorting = (function () {
     function loadData() {
         const rows = getTableBody().querySelectorAll('tr');
 
-        for (let i = 0; i < rows.length; i += 1) {
-            rows[i].data = loadRowData(rows[i]);
+        for (const row of rows) {
+            row.data = loadRowData(row);
         }
+
     }
 
     // sorts the table using the data for the ith column
@@ -118,16 +118,18 @@ const addSorting = (function () {
         const rowNodes = tableBody.querySelectorAll('tr');
         const rows = [];
 
-        for (let i = 0; i < rowNodes.length; i += 1) {
-            rows.push(rowNodes[i]);
-            tableBody.removeChild(rowNodes[i]);
+        for (const rowNode of rowNodes) {
+            rows.push(rowNode);
+            tableBody.removeChild(rowNode);
         }
+
 
         rows.sort(finalSorter);
 
-        for (let i = 0; i < rows.length; i += 1) {
-            tableBody.appendChild(rows[i]);
+        for (const row of rows) {
+            tableBody.appendChild(row);
         }
+
     }
 
     // removes sort indicators for current column being sorted
