@@ -1,26 +1,47 @@
-trigger: 
+trigger:
   branches:
     include:
-      - main  # Trigger on pushes to the 'main' branch
+      - main
 
 pool:
-  vmImage: 'ubuntu-latest'  # Use the latest Ubuntu image for pipeline execution
+  vmImage: 'ubuntu-latest'
 
 variables:
-  repositoryName: '<target repository name>'  # Replace with the actual repository name
+  repositoryName: 'StefanL02'
 
 steps:
-  # Step 1: Build and Push Docker Image
+  # Install Node.js
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.x'
+
+  # Install dependencies
+  - script: |
+      npm ci
+    displayName: 'Install Dependencies'
+
+  # Run Jest tests
+  - script: |
+      echo "Running Jest Tests..."
+      npx jest --ci --reporters=jest-junit
+    displayName: 'Run Jest Tests'
+
+  # Publish Jest test results
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/jest-junit.xml'
+      testRunTitle: 'Jest Test Results'
+      mergeTestResults: true
+
+  # Build Docker container and push to registry (optional)
   - task: Docker@2
     inputs:
-      containerRegistry: '<docker connection>'  # Replace with your Docker registry service connection
+      containerRegistry: '<docker connection>'  # Replace with your registry
       repository: $(repositoryName)
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
-    displayName: 'Build and Push Docker Image'
 
-  # Step 2: Set Node.js Version
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '16.x'  # Specify the Node.js version
-    displa
+  # Post-test message
+  - script: |
+      echo "Pipeline completed successfully!"
+    displayName: 'Post-Pipeline Notification'
