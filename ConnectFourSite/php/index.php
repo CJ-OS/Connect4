@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include '../html/header.html';
+include_once '../html/header.html';
 ?>
 
 <div class="connect-four-game container text-center">
@@ -94,5 +94,5 @@ function makeMove() {
 </script>
 
 <?php
-include '../html/footer.html';
+include_once '../html/footer.html';
 ?>
