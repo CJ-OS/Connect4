@@ -1,47 +1,47 @@
 trigger:
   branches:
     include:
-      - Treatsc2_js_test 
+      - main
 
 pool:
- vmImage: 'ubuntu-latest' 
+  vmImage: 'ubuntu-latest'
 
- variables:
- repositoryName: '<target repository name>'
-
- steps:
- - task: Docker@2
- inputs:
- containerRegistry: '<docker connection>'
- repository: $(repositoryName)
- command: 'buildAndPush'
- Dockerfile: '**/Dockerfile'
-
+variables:
+  repositoryName: 'StefanL02'
 
 steps:
+  # Install Node.js
   - task: NodeTool@0
     inputs:
-      versionSpec: '16.x' 
+      versionSpec: '16.x'
 
-
+  # Install dependencies
   - script: |
-      npm install
+      npm ci
     displayName: 'Install Dependencies'
 
-
+  # Run Jest tests
   - script: |
-      echo "Running Node Tests..."
-      node nodeTest.js  # Ensure nodeTest.js exists and is configured correctly
-    displayName: 'Run Node Tests'
+      echo "Running Jest Tests..."
+      npx jest --ci --reporters=jest-junit
+    displayName: 'Run Jest Tests'
 
+  # Publish Jest test results
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '**/nodeTest-results.xml' 
-      testRunTitle: 'Node.js Test Results'
+      testResultsFiles: '**/jest-junit.xml'
+      testRunTitle: 'Jest Test Results'
       mergeTestResults: true
-      publishRunAttachments: true
 
+  # Build Docker container and push to registry (optional)
+  - task: Docker@2
+    inputs:
+      containerRegistry: '<docker connection>'  # Replace with your registry
+      repository: $(repositoryName)
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
 
+  # Post-test message
   - script: |
-      echo "Test run completed!"
-    displayName: 'Post-Test Cleanup and Notification'
+      echo "Pipeline completed successfully!"
+    displayName: 'Post-Pipeline Notification'
