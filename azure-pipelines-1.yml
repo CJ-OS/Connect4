@@ -15,7 +15,7 @@ steps:
 
   # Install dependencies
   - script: |
-      npm ci
+      npm install
     displayName: 'Install Dependencies'
 
   # Run Jest tests
