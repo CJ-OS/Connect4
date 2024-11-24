@@ -5,28 +5,27 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+# Install Node.js
 - task: NodeTool@0
   inputs:
-    versionSpec: '14.x'
+    versionSpec: '16.x' # Ensure this matches your project's Node.js version
   displayName: 'Install Node.js'
 
+# Install Dependencies
 - script: |
-    npm install
+    npm ci
   displayName: 'Install Dependencies'
 
+# Run Jest Tests with Coverage
 - script: |
-    npm test -- --coverage --coverageReporters=clover
+    npx jest --coverage --coverageReporters=clover
   displayName: 'Run Tests and Generate Clover Report'
 
+# Publish Test Results (JUnit format)
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'
-    testResultsFiles: '**/test-results.xml'
+    testResultsFiles: '**/test-results/results.xml' # Ensure this path matches the jest-junit output
     failTaskOnFailedTests: true
   displayName: 'Publish Test Results'
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/clover.xml'
-  displayName: 'Publish Code Coverage Results'
