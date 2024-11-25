@@ -21,7 +21,7 @@ steps:
   # Run Jest tests
   - script: |
       echo "Running Jest Tests..."
-      npx jest --ci --reporters=jest-junit
+      npm jest --ci --reporters=jest-junit
     displayName: 'Run Jest Tests'
 
   # Publish Jest test results
