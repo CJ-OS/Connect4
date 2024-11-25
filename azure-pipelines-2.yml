@@ -1,31 +1,35 @@
 trigger:
-- main
+- main  # Trigger pipeline on changes to the main branch
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'  # Use Ubuntu as the build agent
 
 steps:
 # Install Node.js
 - task: NodeTool@0
   inputs:
-    versionSpec: '16.x' # Ensure this matches your project's Node.js version
+    versionSpec: '18.x'  # Use Node.js version 18.x
   displayName: 'Install Node.js'
 
-# Install Dependencies
+# Install dependencies
 - script: |
-    npm ci
+    npm install
   displayName: 'Install Dependencies'
 
-# Run Jest Tests with Coverage
+# Run Jest tests
 - script: |
-    npx jest --coverage --coverageReporters=clover
-  displayName: 'Run Tests and Generate Clover Report'
+    npm test -- --ci --reporters=jest-junit
+  displayName: 'Run Jest Tests'
 
-# Publish Test Results (JUnit format)
+# Publish test results
 - task: PublishTestResults@2
   inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/coverage/clover.xml' # Ensure this path matches the jest-junit output
+    testResultsFiles: '**/junit.xml'
     failTaskOnFailedTests: true
   displayName: 'Publish Test Results'
 
+# Verify coverage report
+- script: |
+    echo "Validating coverage report"
+    ls $(System.DefaultWorkingDirectory)/coverage
+  displayName: 'Verify Coverage Report'
