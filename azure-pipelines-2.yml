@@ -25,7 +25,7 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'
-    testResultsFiles: '**/test-results/results.xml' # Ensure this path matches the jest-junit output
+    testResultsFiles: '**/coverage/clover.xml' # Ensure this path matches the jest-junit output
     failTaskOnFailedTests: true
   displayName: 'Publish Test Results'
 
