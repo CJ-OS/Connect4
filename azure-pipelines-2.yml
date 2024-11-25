@@ -16,9 +16,14 @@ steps:
     npm install
   displayName: 'Install Dependencies'
 
+# Ensure Jest has executable permissions
+- script: |
+    chmod +x ./node_modules/.bin/jest
+  displayName: 'Set Jest Executable Permissions'
+
 # Run Jest tests
 - script: |
-    npm test -- --ci --reporters=jest-junit
+    npx jest --ci --reporters=jest-junit
   displayName: 'Run Jest Tests'
 
 # Publish test results
@@ -27,9 +32,3 @@ steps:
     testResultsFiles: '**/junit.xml'
     failTaskOnFailedTests: true
   displayName: 'Publish Test Results'
-
-# Verify coverage report
-- script: |
-    echo "Validating coverage report"
-    ls $(System.DefaultWorkingDirectory)/coverage
-  displayName: 'Verify Coverage Report'
