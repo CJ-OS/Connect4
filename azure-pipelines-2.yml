@@ -36,14 +36,14 @@ steps:
   condition: succeededOrFailed()  # Publish results even if tests failed
 
 ##DOCKER Steps
-# Step 6: Log in to Docker Hub
+# Log in to Docker Hub
 - task: Docker@2
   displayName: 'Log in to Docker Hub'
   inputs:
     command: login
     containerRegistry: 'connect4'  # Service connection name for Docker Hub
 
-# Step 7: Build Docker Image
+#Build Docker Image
 - task: Docker@2
   displayName: 'Build Docker Image'
   inputs:
@@ -53,7 +53,7 @@ steps:
     tags: |
       $(Build.BuildId)
 
-# Step 8: Push Docker Image to Docker Hub
+# Push Docker Image to Docker Hub
 - task: Docker@2
   displayName: 'Push Docker Image to Docker Hub'
   inputs:
@@ -67,7 +67,7 @@ steps:
 - task: AzureWebAppContainer@1
   displayName: 'Deploy Docker Image to Azure App Service'
   inputs:
-    azureSubscription: 'MyAzureServiceConnection'  # Replace with your service connection name
-    appName: 'MyAzureWebApp'  # Replace with your Azure Web App name
+    azureSubscription: 'connect4'  # Replace with your service connection name
+    appName: 'connect4'  # Replace with your Azure Web App name
     imageName: 'ktomko012/connect4:$(Build.BuildId)'  # Docker Hub repository and tag
     containerCommand: ''  # Optional: Specify custom start command if required
